@@ -1,50 +1,80 @@
 name: Build MusicHUD
 
+
 on:
+
   workflow_dispatch:
 
   push:
+
     branches:
       - main
 
 
 jobs:
 
+
   build:
+
 
     runs-on: windows-latest
 
 
     steps:
 
+
       - name: Checkout
-        uses: actions/checkout@v4
+
+        uses: actions/checkout@v5
+
 
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+
+        uses: actions/setup-dotnet@v5
+
         with:
+
           dotnet-version: 8.0.x
 
 
-      - name: Restore
-        run: dotnet restore
 
+      - name: Check files
 
-      - name: Publish EXE
         run: |
-          dotnet publish MusicHUD.csproj ^
-            -c Release ^
-            -r win-x64 ^
-            --self-contained true ^
+
+          dir
+
+
+
+      - name: Restore
+
+        run: |
+
+          dotnet restore
+
+
+
+      - name: Build EXE
+
+        run: |
+
+          dotnet publish MusicHUD.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
             -p:PublishSingleFile=true
 
 
-      - name: Upload EXE
+
+      - name: Upload
+
         uses: actions/upload-artifact@v4
+
         with:
 
-          name: MusicHUD-Windows
+          name: MusicHUD
 
           path: |
+
             **/publish/*.exe
